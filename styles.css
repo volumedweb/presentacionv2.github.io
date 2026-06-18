@@ -1,0 +1,475 @@
+/* =================================================================
+   styles.css  —  Salud Sexual, Embarazo Adolescente e ITS
+   Estructura:
+     1. Variables de tema (claro / oscuro)
+     2. Base y layout
+     3. Barra superior y botones
+     4. Menú de miniaturas
+     5. Escenario y diapositivas (efecto semi-3D + transiciones)
+     6. Estilos por TIPO de diapositiva
+     7. Botones de navegación inferior
+     8. Responsive
+   ================================================================= */
+
+/* ============ 1. VARIABLES DE TEMA ============ */
+:root {
+  --bg: #eef2f8;
+  --bg-grad: radial-gradient(1200px 800px at 70% -10%, #ffffff 0%, #e7edf6 60%, #dde6f2 100%);
+  --slide-bg: #ffffff;
+  --slide-bg-dark-section: #0f1b2d;
+  --text: #1d2433;
+  --text-soft: #5a6473;
+  --accent: #2f6bff;
+  --accent-2: #1fbf75;
+  --card: #f6f8fc;
+  --card-border: #e4e9f2;
+  --title: #16203a;
+  --warn: #e2433a;
+  --shadow-3d: 0 18px 40px rgba(28, 50, 92, 0.18), 0 4px 10px rgba(28, 50, 92, 0.10);
+  --shadow-soft: 0 8px 24px rgba(28, 50, 92, 0.12);
+  --topbar-bg: rgba(255, 255, 255, 0.75);
+  --panel-bg: #ffffff;
+  --pink: #fde8f1;
+}
+
+[data-theme="dark"] {
+  --bg: #0b1220;
+  --bg-grad: radial-gradient(1200px 800px at 70% -10%, #16243d 0%, #0e1828 55%, #070d18 100%);
+  --slide-bg: #111c2e;
+  --slide-bg-dark-section: #060c16;
+  --text: #e7edf7;
+  --text-soft: #9aa7bd;
+  --accent: #5b8cff;
+  --accent-2: #34d399;
+  --card: #1a2740;
+  --card-border: #2a3a59;
+  --title: #f2f6ff;
+  --warn: #ff6b62;
+  --shadow-3d: 0 18px 44px rgba(0, 0, 0, 0.55), 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --topbar-bg: rgba(13, 22, 38, 0.7);
+  --panel-bg: #0f1a2c;
+  --pink: #2a1c28;
+}
+
+/* ============ 2. BASE Y LAYOUT ============ */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+  background: var(--bg);
+  background-image: var(--bg-grad);
+  color: var(--text);
+  min-height: 100vh;
+  overflow: hidden;
+  transition: background-color .45s ease, color .45s ease;
+}
+
+/* ============ 3. BARRA SUPERIOR Y BOTONES ============ */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 22px;
+  z-index: 40;
+  pointer-events: none;
+}
+.topbar > * { pointer-events: auto; }
+.topbar-right { display: flex; gap: 10px; }
+
+.icon-btn {
+  width: 44px; height: 44px;
+  display: grid; place-items: center;
+  border: 1px solid var(--card-border);
+  background: var(--topbar-bg);
+  backdrop-filter: blur(10px);
+  color: var(--text);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease, background .3s ease;
+  box-shadow: var(--shadow-soft);
+}
+.icon-btn:hover { transform: translateY(-2px) scale(1.04); }
+.icon-btn:active { transform: translateY(0) scale(.96); }
+.icon-btn.small { width: 34px; height: 34px; border-radius: 10px; font-size: 16px; }
+.icon-btn svg { fill: currentColor; }
+
+/* alternancia de iconos sol / luna según el tema */
+.ico-sun  { display: none; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+[data-theme="dark"] .ico-moon { display: none; }
+[data-theme="dark"] .ico-sun  { display: block; }
+
+/* ============ 4. MENÚ DE MINIATURAS ============ */
+.overlay {
+  position: fixed; inset: 0;
+  background: rgba(8, 14, 26, 0.45);
+  backdrop-filter: blur(2px);
+  opacity: 0; visibility: hidden;
+  transition: opacity .3s ease, visibility .3s ease;
+  z-index: 49;
+}
+.overlay.show { opacity: 1; visibility: visible; }
+
+.thumb-panel {
+  position: fixed; top: 0; left: 0; bottom: 0;
+  width: 300px; max-width: 84vw;
+  background: var(--panel-bg);
+  border-right: 1px solid var(--card-border);
+  box-shadow: var(--shadow-3d);
+  transform: translateX(-105%);
+  transition: transform .38s cubic-bezier(.22,.61,.36,1);
+  z-index: 50;
+  display: flex; flex-direction: column;
+}
+.thumb-panel.open { transform: translateX(0); }
+
+.thumb-panel-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 18px 12px;
+  font-weight: 700; color: var(--title);
+  border-bottom: 1px solid var(--card-border);
+}
+.thumb-list { padding: 14px; overflow-y: auto; flex: 1; }
+
+/* Cada miniatura = nº + una vista previa en miniatura de la diapositiva */
+.thumb {
+  display: block;
+  padding: 8px;
+  margin-bottom: 12px;
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  background: var(--card);
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.thumb:hover { transform: translateX(4px); }
+
+.thumb-head {
+  display: flex; gap: 8px; align-items: center; margin-bottom: 8px;
+}
+.thumb .thumb-no {
+  flex: 0 0 24px; height: 24px;
+  display: grid; place-items: center;
+  background: var(--accent); color: #fff;
+  border-radius: 7px; font-size: 12px; font-weight: 700;
+}
+.thumb .thumb-name {
+  font-size: 12px; color: var(--text-soft); line-height: 1.2;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* Lienzo de la vista previa: contiene la diapositiva escalada */
+.thumb-canvas {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--slide-bg);
+  border: 1px solid var(--card-border);
+  pointer-events: none; /* la vista previa no recibe clics */
+}
+/* La diapositiva clonada se reduce con transform: scale() vía variable */
+.thumb-canvas .slide {
+  position: absolute; top: 0; left: 0;
+  width: 1180px; height: 664px;   /* tamaño de referencia 16:9 */
+  transform-origin: top left;
+  /* anula la animación heredada para que se vea quieta y completa */
+  opacity: 1 !important; visibility: visible !important;
+  transition: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* miniatura seleccionada: se sobresalta */
+.thumb.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent), var(--shadow-soft);
+  transform: translateX(6px) scale(1.02);
+  background: color-mix(in srgb, var(--accent) 10%, var(--card));
+}
+.thumb.active .thumb-name { color: var(--text); font-weight: 600; }
+
+/* ============ 5. ESCENARIO Y DIAPOSITIVAS ============ */
+.stage {
+  position: relative;
+  width: 100vw; height: 100vh;
+  display: grid; place-items: center;
+  padding: 70px 90px 80px;
+}
+.deck { position: relative; width: 100%; height: 100%; max-width: 1180px; }
+
+.slide {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 48px 56px;
+  background: var(--slide-bg);
+  border-radius: 26px;
+  /* efecto semi-3D en vista normal */
+  box-shadow: var(--shadow-3d);
+  border: 1px solid var(--card-border);
+
+  opacity: 0; visibility: hidden;
+  /* transición tipo "suspensión": se aleja, gira un poco y se va */
+  transform: perspective(1600px) translateZ(-120px) rotateX(6deg) scale(.94);
+  transition:
+    opacity .5s ease,
+    transform .55s cubic-bezier(.2,.7,.2,1),
+    visibility .5s ease;
+  z-index: 1;
+}
+
+/* diapositiva activa: entra suspendiéndose al frente */
+.slide.active {
+  opacity: 1; visibility: visible;
+  transform: perspective(1600px) translateZ(0) rotateX(0) scale(1);
+  z-index: 2;
+}
+/* dirección de salida segun el sentido de navegacion */
+.slide.exit-left  { transform: perspective(1600px) translateZ(-160px) translateX(-7%) rotateY(8deg) scale(.92); }
+.slide.exit-right { transform: perspective(1600px) translateZ(-160px) translateX(7%)  rotateY(-8deg) scale(.92); }
+
+/* CUADROS internos: bordes redondeados + semi-3D */
+.card3d {
+  border-radius: 18px;
+  box-shadow: var(--shadow-3d);
+  transition: transform .35s ease, box-shadow .35s ease;
+}
+.slide.active .card3d:hover { transform: translateY(-4px); }
+
+/* En PANTALLA COMPLETA se aplana el efecto 3D (queda limpio) */
+body.is-fullscreen .slide { box-shadow: 0 10px 30px rgba(0,0,0,.18); border-radius: 0; }
+body.is-fullscreen .card3d { box-shadow: var(--shadow-soft); }
+body.is-fullscreen .stage { padding: 0; }
+body.is-fullscreen .deck { max-width: 100%; height: 100%; }
+body.is-fullscreen .slide.active { transform: perspective(1600px) translateZ(0) scale(1); }
+
+/* En pantalla completa ocultamos las flechas, el contador y la barra
+   superior. La navegación sigue por teclado; el menú se abre con el
+   botón flotante semitransparente. */
+body.is-fullscreen .nav-btn,
+body.is-fullscreen .counter,
+body.is-fullscreen .topbar { display: none; }
+
+/* ============ 6. ESTILOS POR TIPO DE DIAPOSITIVA ============ */
+
+/* Título de sección con barra azul a la izquierda */
+.title-bar {
+  position: relative;
+  font-size: clamp(20px, 2.4vw, 34px);
+  font-weight: 800; letter-spacing: .3px;
+  color: var(--title);
+  padding-left: 18px; margin-bottom: 22px;
+  line-height: 1.15;
+}
+.title-bar::before {
+  content: ""; position: absolute; left: 0; top: 4px; bottom: 4px;
+  width: 6px; border-radius: 6px; background: var(--accent);
+}
+
+/* --- Portada (slide 1 y cierre) --- */
+.slide-cover { text-align: center; align-items: center; }
+.cover-inner { max-width: 820px; }
+.eyebrow { color: var(--accent); font-weight: 700; letter-spacing: 3px; margin-bottom: 14px; }
+.slide-cover h1 { font-size: clamp(32px, 5vw, 64px); font-weight: 900; color: var(--title); line-height: 1.05; }
+.big-q { font-size: clamp(48px, 8vw, 96px); }
+.accent-bar { display: block; width: 80px; height: 5px; border-radius: 4px; background: var(--accent); margin: 26px auto; }
+.subtitle { color: var(--text-soft); font-size: clamp(15px, 1.6vw, 20px); }
+.closing-cta { color: var(--accent); font-weight: 700; margin-top: 22px; font-size: clamp(15px,1.6vw,20px); }
+
+/* --- Diapositiva de cierre (28): más aire entre los textos --- */
+.slide-closing .big-q { margin-bottom: 30px; }
+.slide-closing .subtitle { margin-bottom: 14px; }
+.slide-closing .closing-cta { margin-top: 40px; }
+
+/* --- Diapositivas separadoras (PARTE I, II...) fondo oscuro --- */
+.slide-part { background: var(--slide-bg-dark-section); border-color: transparent; text-align: center; align-items: center; }
+.slide-part .part-inner { max-width: 880px; }
+.part-tag { color: #6f8095; letter-spacing: 4px; margin-bottom: 14px; font-size: 14px; }
+.slide-part h2 { color: #fff; font-size: clamp(30px, 5vw, 58px); font-weight: 900; }
+.slide-part .accent-bar { background: var(--accent); }
+.part-sub { color: #8a99ad; }
+
+/* --- Diapositiva dividida texto/imagen --- */
+.slide-split { flex-direction: row; align-items: center; gap: 42px; }
+.split-text { flex: 1; }
+.split-text p { color: var(--text-soft); font-size: clamp(14px,1.5vw,18px); line-height: 1.6; margin-bottom: 10px; }
+.split-text h4 { color: var(--title); margin: 6px 0 6px; font-size: clamp(16px,1.7vw,20px); }
+.split-media { flex: 1; max-width: 48%; overflow: hidden; background: var(--card); }
+.split-media img { display: block; width: 100%; height: auto; }
+.split-media.soft-pink { background: var(--pink); padding: 18px; }
+.split-media.soft-pink img { border-radius: 10px; }
+
+/* listas con check */
+.check-list { list-style: none; margin-top: 12px; }
+.check-list li {
+  position: relative; padding-left: 30px; margin-bottom: 12px;
+  color: var(--text-soft); font-size: clamp(14px,1.5vw,18px);
+}
+.check-list li::before {
+  content: "✔"; position: absolute; left: 0; top: 0;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--accent); color: #fff;
+  font-size: 12px; display: grid; place-items: center;
+}
+.highlight-box {
+  background: var(--card); border: 1px solid var(--card-border);
+  border-radius: 14px; padding: 14px 18px; margin-top: 14px;
+}
+.warn { color: var(--warn) !important; }
+.warn strong { color: var(--warn); }
+
+/* --- Tarjetas de estadísticas --- */
+.stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; margin-top: 20px; }
+.stat-card {
+  background: var(--card); border: 1px solid var(--card-border);
+  border-bottom: 4px solid var(--accent);
+  padding: 38px 18px; text-align: center;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.stat-num { font-size: clamp(40px, 6vw, 72px); font-weight: 900; color: var(--accent); line-height: 1; }
+.stat-label { color: var(--text-soft); font-weight: 600; }
+
+/* --- Barras comparativas --- */
+.bars-intro { color: var(--text-soft); margin-bottom: 18px; font-size: clamp(14px,1.5vw,18px); }
+.bar-row { display: flex; align-items: center; gap: 18px; margin-bottom: 16px; }
+.bar-label { flex: 0 0 130px; text-align: right; font-weight: 700; color: var(--title); }
+.bar-track { flex: 1; background: var(--card-border); border-radius: 40px; overflow: hidden; height: 44px; }
+.bar-fill {
+  height: 100%; display: flex; align-items: center; justify-content: flex-end;
+  padding: 0 18px; color: #fff; font-weight: 700; border-radius: 40px;
+  width: 0; transition: width 1s cubic-bezier(.2,.7,.2,1);
+}
+.bar-blue { background: linear-gradient(90deg, #4f86ff, #2f6bff); }
+.bar-green { background: linear-gradient(90deg, #29c07e, #1fbf75); justify-content: center; }
+.bars-note { color: var(--accent-2); font-weight: 700; text-align: center; margin-top: 8px; }
+
+/* --- 3 tarjetas (factores, clasificación, riesgos) --- */
+.three-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 18px; }
+.info-card {
+  background: var(--card); border: 1px solid var(--card-border);
+  padding: 28px 22px; text-align: center;
+}
+.info-card .ic-icon { font-size: 30px; margin-bottom: 10px; }
+.info-card h4 { color: var(--title); font-size: clamp(17px,1.8vw,22px); margin-bottom: 8px; }
+.info-card p { color: var(--text-soft); }
+.info-card .big { font-size: clamp(15px,1.6vw,19px); margin-bottom: 6px; }
+.info-card .small { font-size: 13px; }
+.risk-card {
+  background: var(--pink); border: 1px solid var(--card-border);
+  padding: 34px 20px; text-align: center;
+}
+.risk-card h4 { color: var(--title); font-size: clamp(16px,1.8vw,22px); }
+
+/* --- Tabla --- */
+.data-table { width: 100%; border-collapse: collapse; overflow: hidden; background: var(--slide-bg); margin-top: 10px; }
+.data-table th {
+  background: var(--slide-bg-dark-section); color: #fff;
+  text-align: left; padding: 16px 20px; font-size: clamp(14px,1.5vw,17px);
+}
+.data-table td {
+  padding: 16px 20px; border-bottom: 1px solid var(--card-border);
+  color: var(--text-soft); font-size: clamp(14px,1.5vw,17px);
+}
+.data-table tbody tr:nth-child(even) { background: var(--card); }
+.data-table td strong { color: var(--title); }
+
+/* --- Cita --- */
+.quote-box {
+  position: relative; background: var(--card);
+  border-left: 6px solid var(--accent);
+  padding: 34px 40px; border-radius: 16px;
+  font-style: italic; font-size: clamp(17px,2vw,26px);
+  color: var(--text); line-height: 1.5; margin-top: 10px;
+}
+.quote-mark { position: absolute; top: 6px; left: 16px; font-size: 60px; color: var(--card-border); font-style: normal; }
+
+/* ============ 7. NAVEGACIÓN INFERIOR ============ */
+.nav-btn {
+  position: fixed; bottom: 22px;
+  width: 52px; height: 52px;
+  display: grid; place-items: center;
+  border: 1px solid var(--card-border);
+  background: var(--topbar-bg);
+  backdrop-filter: blur(10px);
+  color: var(--text);
+  border-radius: 16px; cursor: pointer;
+  box-shadow: var(--shadow-soft);
+  z-index: 40;
+  transition: transform .2s ease, background .3s ease;
+}
+.nav-prev { left: calc(50% - 130px); }
+.nav-next { right: calc(50% - 130px); }
+.nav-btn:hover { transform: translateY(-3px); background: var(--accent); color: #fff; }
+.nav-btn:active { transform: translateY(0) scale(.94); }
+.nav-btn:disabled { opacity: .35; cursor: not-allowed; transform: none; }
+
+/* Botón flotante para abrir el menú en pantalla completa.
+   Oculto por defecto; solo aparece dentro de pantalla completa. */
+.fs-menu-btn {
+  position: fixed; top: 18px; left: 18px;
+  width: 44px; height: 44px;
+  display: none; place-items: center;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(20, 30, 50, 0.28);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  border-radius: 14px; cursor: pointer;
+  z-index: 60;
+  opacity: .55;
+  transition: opacity .25s ease, transform .2s ease, background .25s ease;
+}
+.fs-menu-btn svg { fill: currentColor; }
+.fs-menu-btn:hover { opacity: 1; transform: scale(1.06); background: rgba(20, 30, 50, 0.5); }
+body.is-fullscreen .fs-menu-btn { display: grid; }
+
+.counter {
+  position: fixed; bottom: 34px; left: 50%; transform: translateX(-50%);
+  font-weight: 700; color: var(--text-soft);
+  background: var(--topbar-bg); backdrop-filter: blur(10px);
+  padding: 6px 16px; border-radius: 30px; border: 1px solid var(--card-border);
+  z-index: 39; font-size: 14px;
+}
+
+/* ============ 8. RESPONSIVE ============ */
+@media (max-width: 860px) {
+  .stage { padding: 64px 16px 76px; }
+  .slide { padding: 26px 22px; }
+  .slide-split { flex-direction: column; gap: 20px; }
+  .split-media { max-width: 100%; }
+  .stat-grid, .three-grid { grid-template-columns: 1fr; gap: 14px; }
+  .bar-label { flex-basis: 92px; }
+  .nav-prev { left: 16px; }
+  .nav-next { right: 16px; }
+}
+/* ============ 9. IMPRESIÓN / EXPORTAR A PDF ============ */
+/* Al imprimir (o "Guardar como PDF") se muestran TODAS las diapositivas,
+   una por página, sin la interfaz (botones, menú, contador). El script
+   añade la clase .printing al body justo antes de imprimir. */
+@media print {
+  @page { size: 1180px 664px; margin: 0; }   /* relación 16:9 */
+
+  .topbar, .thumb-panel, .overlay, .nav-btn,
+  .counter, .fs-menu-btn { display: none !important; }
+
+  body { overflow: visible; background: #fff; }
+  .stage { position: static; width: auto; height: auto; padding: 0; display: block; }
+  .deck { position: static; width: 100%; height: auto; max-width: 100%; }
+
+  /* cada diapositiva ocupa su propia página, visible y sin animación */
+  .slide {
+    position: relative !important;
+    inset: auto !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    width: 1180px; height: 664px;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    break-after: page;
+    page-break-after: always;
+    overflow: hidden;
+  }
+  .slide:last-child { break-after: auto; page-break-after: auto; }
+}

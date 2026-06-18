@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Salud Sexual, Embarazo Adolescente e ITS</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ============================================================= -->
+  <!-- BARRA SUPERIOR: botones de tema y pantalla completa           -->
+  <!-- ============================================================= -->
+  <header class="topbar">
+    <button id="btnMenu" class="icon-btn" title="Ver diapositivas" aria-label="Menú de diapositivas">
+      <!-- icono de cuadrícula -->
+      <svg viewBox="0 0 24 24" width="22" height="22"><path d="M3 3h7v7H3V3zm11 0h7v7h-7V3zM3 14h7v7H3v-7zm11 0h7v7h-7v-7z"/></svg>
+    </button>
+
+    <div class="topbar-right">
+      <!-- Descargar / imprimir en PDF -->
+      <button id="btnPdf" class="icon-btn" title="Descargar en PDF" aria-label="Descargar presentación en PDF">
+        <svg viewBox="0 0 24 24" width="22" height="22"><path d="M12 3v10m0 0l-4-4m4 4l4-4M5 17v2a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <!-- Botón pantalla completa -->
+      <button id="btnFull" class="icon-btn" title="Pantalla completa" aria-label="Pantalla completa">
+        <svg viewBox="0 0 24 24" width="22" height="22"><path d="M4 4h6v2H6v4H4V4zm10 0h6v6h-2V6h-4V4zM4 14h2v4h4v2H4v-6zm14 0h2v6h-6v-2h4v-4z"/></svg>
+      </button>
+      <!-- Cambio de tema (claro / oscuro) -->
+      <button id="btnTheme" class="icon-btn" title="Cambiar tema" aria-label="Cambiar tema claro/oscuro">
+        <svg class="ico-moon" viewBox="0 0 24 24" width="22" height="22"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36A5.39 5.39 0 0 1 12.6 3.1 8.7 8.7 0 0 0 12 3z"/></svg>
+        <svg class="ico-sun" viewBox="0 0 24 24" width="22" height="22"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5h0v3m0 14v3M2 12h3m14 0h3M5 5l2 2m10 10l2 2M5 19l2-2M17 7l2-2"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ============================================================= -->
+  <!-- MENÚ DESPLEGABLE DE MINIATURAS                                 -->
+  <!-- ============================================================= -->
+  <aside id="thumbPanel" class="thumb-panel" aria-label="Lista de diapositivas">
+    <div class="thumb-panel-head">
+      <span>Diapositivas</span>
+      <button id="btnCloseMenu" class="icon-btn small" aria-label="Cerrar menú">✕</button>
+    </div>
+    <div id="thumbList" class="thumb-list"><!-- Las miniaturas se generan en Script.js --></div>
+  </aside>
+  <div id="overlay" class="overlay"></div>
+
+  <!-- ============================================================= -->
+  <!-- ESCENARIO DE DIAPOSITIVAS                                      -->
+  <!-- ============================================================= -->
+  <main class="stage">
+
+    <!-- Botón flotante para abrir el menú en pantalla completa (semitransparente) -->
+    <button id="btnMenuFs" class="fs-menu-btn" title="Ver diapositivas" aria-label="Abrir menú de diapositivas">
+      <svg viewBox="0 0 24 24" width="22" height="22"><path d="M3 3h7v7H3V3zm11 0h7v7h-7V3zM3 14h7v7H3v-7zm11 0h7v7h-7v-7z"/></svg>
+    </button>
+
+    <div id="deck" class="deck">
+
+      <!-- ===================== DIAPOSITIVA 1 ===================== -->
+      <section class="slide slide-cover" data-title="Portada">
+        <div class="cover-inner">
+          <p class="eyebrow">INFORME ESTRATÉGICO 2024</p>
+          <h1>Salud Sexual, Embarazo Adolescente e ITS</h1>
+          <span class="accent-bar"></span>
+          <p class="subtitle">Análisis del contexto en Bolivia y el Departamento de Santa Cruz</p>
+        </div>
+      </section>
+
+      <!-- ===================== DIAPOSITIVA 2 ===================== -->
+      <section class="slide slide-part" data-title="Parte I">
+        <div class="part-inner">
+          <p class="part-tag">PARTE I</p>
+          <h2>Contexto y Tendencias Regionales</h2>
+          <span class="accent-bar"></span>
+          <p class="part-sub">Análisis de datos demográficos y epidemiológicos</p>
+        </div>
+      </section>
+
+      <!-- ===================== DIAPOSITIVA 3 ===================== -->
+      <section class="slide slide-split" data-title="Fecundidad adolescente">
+        <div class="split-text">
+          <h3 class="title-bar">FECUNDIDAD ADOLESCENTE EN SANTA CRUZ</h3>
+          <p>Santa Cruz registra las cifras <strong>más altas</strong> de embarazo precoz en el país.</p>
+          <ul class="check-list">
+            <li><strong>17%</strong> del total de gestaciones regionales.</li>
+            <li>Impacto directo en la inserción laboral.</li>
+            <li>Ciclo de desempleo y pobreza.</li>
+          </ul>
+        </div>
+        <div class="split-media card3d">
+          <img src="imagenes/cies.jpg" alt="Clínica CIES Santa Cruz" />
+        </div>
+      </section>
+
+      <!-- ===================== DIAPOSITIVA 4 ===================== -->
+      <section class="slide slide-stats" data-title="Estadísticas críticas">
+        <h3 class="title-bar">ESTADÍSTICAS CRÍTICAS (ENE - JUL 2022)</h3>
+        <div class="stat-grid">
+          <div class="stat-card card3d"><span class="stat-num">6,951</span><span class="stat-label">Embarazos Precoces</span></div>
+          <div class="stat-card card3d"><span class="stat-num">538</span><span class="stat-label">Menores de 15 años</span></div>
+          <div class="stat-card card3d"><span class="stat-num">1°</span><span class="stat-label">Lugar Nacional</span></div>
+        </div>
+      </section>
+
+      <!-- ===================== DIAPOSITIVA 5 ===================== -->
+      <section class="slide slide-bars" data-title="Reducción nacional">
+        <h3 class="title-bar">REDUCCIÓN DEL EMBARAZO ADOLESCENTE (NACIONAL)</h3>
+        <p class="bars-intro">Casos registrados entre 10 a 19 años:</p>
+        <div class="bar-row">
+          <span class="bar-label">Gestión 2015</span>
+          <div class="bar-track"><div class="bar-fill bar-blue" style="width:100%"><span>82,416 casos</span></div></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-label">Gestión 2023</span>
+          <div class="bar-track"><div class="bar-fill bar-green" style="width:40%"><span>32,660 casos</span></div></div>
+        </div>
+        <p class="bars-note">Reducción significativa gracias a políticas de prevención.</p>
+      </section>
+
+      <!-- ===================== DIAPOSITIVA 6 ===================== -->
+      <section class="slide slide-part" data-title="Parte II">
+        <div class="part-inner">
+          <p class="part-tag">PARTE II</p>
+          <h2>Infecciones de Transmisión Sexual</h2>
+          <span class="accent-bar"></span>
+          <p class="part-sub">Vulnerabilidad juvenil y prevalencia de VIH</p>
+        </div>
+      </section>
+
+      <!-- ===================== DIAPOSITIVA 7 ===================== -->
+      <section class="slide slide-split" data-title="Panorama del VIH">
+        <div class="split-media card3d">
+          <img src="imagenes/vih.jpg" alt="Panorama del VIH en Santa Cruz" />
+        </div>
+        <div class="split-text">
+          <h3 class="title-bar">PANORAMA DEL VIH EN SANTA CRUZ</h3>
+          <h4>Concentración Nacional</h4>
+          <p>El departamento concentra el <strong>42%</strong> de los casos totales de VIH/sida en Bolivia.</p>
+          <p class="highlight-box"><strong>1,200 - 1,400</strong> casos nuevos detectados anualmente.</p>
+        </div>
+      </section>
+
+      <!-- ===================== DIAPOSITIVA 8 ===================== -->
+      <section class="slide slide-cards3" data-title="Factores de riesgo">
+        <h3 class="title-bar">FACTORES DE RIESGO EN JUVENTUD CRUCEÑA</h3>
+        <div class="three-grid">
+          <div class="info-card card3d"><div class="ic-icon">🕑</div><h4>Inicio Temprano</h4><p>Exposición sexual a edades cada vez menores.</p></div>
+          <div class="info-card card3d"><div class="ic-icon">🛡️</div><h4>Uso Inconsistente</h4><p>Baja frecuencia en el uso del preservativo.</p></div>
+          <div class="info-card card3d"><div class="ic-icon">🍸</div><h4>Consumo de Alcohol</h4><p>Relacionado directamente con sexo sin protección.</p></div>
+        </div>
+      </section>
+
+      <!-- ===================== DIAPOSITIVA 9 ===================== -->
+      <section class="slide slide-part" data-title="Parte III">
+        <div class="part-inner">
+          <p class="part-tag">PARTE III</p>
+          <h2>Impacto Socioeducativo y de Salud</h2>
+          <span class="accent-bar"></span>
+          <p class="part-sub">Riesgos del embarazo no deseado y aborto inseguro</p>
+        </div>
+      </section>
+
+      <!-- ===================== DIAPOSITIVA 10 ===================== -->
+      <section class="slide slide-split" data-title="Trayectoria escolar">
+        <div class="split-text">
+          <h3 class="title-bar">IMPACTO EN LA TRAYECTORIA ESCOLAR</h3>
+          <h4>El Evento Detonante</h4>
+          <p>El embarazo suele forzar el abandono escolar, limitando capacidades laborales futuras.</p>
+          <p><strong>Factor Clave:</strong> La red de apoyo familiar (padres/abuelos) es determinante para la permanencia escolar.</p>
+        </div>
+        <div class="split-media card3d">
+          <img src="imagenes/desercion-escolar-embarazos-no-deceados.jpeg" alt="Impacto en la trayectoria escolar" />
+        </div>
+      </section>
+
+      <!-- ===================== DIAPOSITIVA 11 ===================== -->
+      <section class="slide slide-table" data-title="Riesgos del aborto">
+        <h3 class="title-bar">RIESGOS DEL ABORTO SIN SUPERVISIÓN</h3>
+        <table class="data-table card3d">
+          <thead><tr><th>Categoría de Impacto</th><th>Consecuencias Físicas Críticas</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Inmediatas</strong></td><td>Hemorragias graves, infecciones pélvicas y septicemia.</td></tr>
+            <tr><td><strong>Largo Plazo</strong></td><td>Perforación uterina e infertilidad definitiva.</td></tr>
+            <tr><td><strong>Obstétricas</strong></td><td>Complicaciones severas en futuras gestaciones.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ===================== DIAPOSITIVA 12 ===================== -->
+      <section class="slide slide-quote" data-title="Consecuencias psicológicas">
+        <h3 class="title-bar">CONSECUENCIAS PSICOLÓGICAS</h3>
+        <blockquote class="quote-box card3d">
+          <span class="quote-mark">”</span>
+          El procedimiento en clandestinidad genera sentimientos de culpa, vergüenza, ansiedad y depresión, pudiendo derivar en ideación suicida en casos críticos.
+        </blockquote>
+      </section>
+
+      <!-- ===================== DIAPOSITIVA 13 ===================== -->
+      <section class="slide slide-cards3" data-title="Vulnerabilidad biológica">
+        <h3 class="title-bar">VULNERABILIDAD BIOLÓGICA (&lt; 16 AÑOS)</h3>
+        <p class="bars-intro">Debido al desarrollo incompleto del organismo, las adolescentes tempranas enfrentan:</p>
+        <div class="three-grid">
+          <div class="risk-card card3d"><h4>Hipertensión Gestacional</h4></div>
+          <div class="risk-card card3d"><h4>Anemia Severa</h4></div>
+          <div class="risk-card card3d"><h4>Parto Prematuro</h4></div>
+        </div>
+      </section>
+
+      <!-- ===================== DIAPOSITIVA 14 ===================== -->
+      <section class="slide slide-part" data-title="Parte IV">
+        <div class="part-inner">
+          <p class="part-tag">PARTE IV</p>
+          <h2>Guía de Métodos Anticonceptivos</h2>
+          <span class="accent-bar"></span>
+          <p class="part-sub">Análisis exhaustivo: Mecanismos y Efectividad</p>
+        </div>
+      </section>
+
+      <!-- ===================== DIAPOSITIVA 15 ===================== -->
+      <section class="slide slide-cards3" data-title="Clasificación de métodos">
+        <h3 class="title-bar">CLASIFICACIÓN DE MÉTODOS MODERNOS</h3>
+        <div class="three-grid">
+          <div class="info-card card3d"><h4>Hormonales</h4><p class="big">Inhiben la ovulación.</p><p class="small">Píldoras, implantes, inyecciones.</p></div>
+          <div class="info-card card3d"><h4>De Barrera</h4><p class="big">Bloqueo físico.</p><p class="small">Preservativos, diafragma.</p></div>
+          <div class="info-card card3d"><h4>Permanentes</h4><p class="big">Esterilización definitiva.</p><p class="small">Ligadura y Vasectomía.</p></div>
+        </div>
+      </section>
+
+      <!-- ===================== DIAPOSITIVA 16 ===================== -->
+      <section class="slide slide-split" data-title="Píldoras anticonceptivas">
+        <div class="split-text">
+          <h3 class="title-bar">1. PÍLDORAS ANTICONCEPTIVAS</h3>
+          <p><strong>Composición:</strong> Estrógeno y progestina.</p>
+          <p><strong>Uso:</strong> Ingesta diaria vía oral a la misma hora.</p>
+          <p class="warn"><strong>Advertencia:</strong> Riesgo cardiovascular en fumadoras &gt; 35 años. No protege contra ITS.</p>
+        </div>
+        <div class="split-media card3d soft-pink">
+          <img src="imagenes/pastilla_anticonceptiva.png" alt="Blíster de pastillas anticonceptivas" />
+        </div>
+      </section>
+
+      <!-- ===================== DIAPOSITIVA 17 ===================== -->
+      <section class="slide slide-split" data-title="DIU">
+        <div class="split-text">
+          <h3 class="title-bar">2. DISPOSITIVO INTRAUTERINO (DIU)</h3>
+          <p><strong>Tipos:</strong> Cobre (no hormonal) y Hormonal (Levonorgestrel).</p>
+          <p><strong>Aplicación:</strong> Inserción uterina por profesional médico.</p>
+          <p><strong>Duración:</strong> 3 a 12 años según el tipo.</p>
+          <p><strong>Nota:</strong> Requiere revisión periódica de los hilos guía.</p>
+        </div>
+        <div class="split-media card3d">
+          <img src="imagenes/diu.jpg" alt="Dispositivo intrauterino DIU" />
+        </div>
+      </section>
+
+      <!-- ===================== DIAPOSITIVA 18 ===================== -->
+      <section class="slide slide-split" data-title="Implante subdérmico">
+        <div class="split-text">
+          <h3 class="title-bar">3. IMPLANTE SUBDÉRMICO</h3>
+          <p><strong>Mecanismo:</strong> Varilla flexible con progestina debajo de la piel del brazo.</p>
+          <p><strong>Duración:</strong> 3 a 5 años de alta eficacia.</p>
+          <p><strong>Efectos:</strong> Alteraciones en el patrón de sangrado menstrual.</p>
+        </div>
+        <div class="split-media card3d soft-pink">
+          <img src="imagenes/implalnte_subdermico.png" alt="Implante anticonceptivo subdérmico" />
+        </div>
+      </section>
+
+      <!-- ===================== DIAPOSITIVA 19 ===================== -->
+      <section class="slide slide-split" data-title="Inyección anticonceptiva">
+        <div class="split-text">
+          <h3 class="title-bar">4. INYECCIÓN ANTICONCEPTIVA</h3>
+          <p><strong>Aplicación:</strong> Intramuscular o subcutánea cada 3 meses.</p>
+          <p><strong>Efecto:</strong> Inhibición prolongada de la ovulación.</p>
+          <p class="warn"><strong>Advertencia:</strong> El uso &gt; 2 años puede reducir densidad ósea (reversible).</p>
+        </div>
+        <div class="split-media card3d">
+          <img src="imagenes/inyeccion_anticonceptiva.jpg" alt="Inyección anticonceptiva" />
+        </div>
+      </section>
+
+      <!-- ===================== DIAPOSITIVA 20 ===================== -->
+      <section class="slide slide-split" data-title="Anillo vaginal">
+        <div class="split-text">
+          <h3 class="title-bar">5. ANILLO VAGINAL</h3>
+          <p><strong>Uso:</strong> Anillo flexible que se inserta en la vagina por 3 semanas.</p>
+          <p><strong>Descanso:</strong> 1 semana para el sangrado menstrual.</p>
+          <p><strong>Reinserción:</strong> Se requiere uno nuevo cada ciclo.</p>
+        </div>
+        <div class="split-media card3d">
+          <img src="imagenes/anillo-vaginal.jpg" alt="Anillo vaginal" />
+        </div>
+      </section>
+
+      <!-- ===================== DIAPOSITIVA 21 ===================== -->
+      <section class="slide slide-split" data-title="Parche transdérmico">
+        <div class="split-text">
+          <h3 class="title-bar">6. PARCHE TRANSDÉRMICO</h3>
+          <p><strong>Uso:</strong> Adhesivo sobre piel limpia; se cambia semanalmente por 3 semanas.</p>
+          <p><strong>Eficacia:</strong> Puede disminuir en mujeres &gt; 90 kg.</p>
+          <p><strong>Sitio:</strong> Glúteos, abdomen o espalda (evitar senos).</p>
+        </div>
+        <div class="split-media card3d">
+          <img src="imagenes/parches-transdermicos.jpg" alt="Parche transdérmico anticonceptivo" />
+        </div>
+      </section>
+
+      <!-- ===================== DIAPOSITIVA 22 ===================== -->
+      <section class="slide slide-split" data-title="Preservativo femenino">
+        <div class="split-text">
+          <h3 class="title-bar">7. PRESERVATIVO FEMENINO</h3>
+          <p><strong>Material:</strong> Nitrilo o poliuretano (ideal para alérgicos al látex).</p>
+          <p><strong>Ventaja:</strong> Protege contra ITS y embarazos.</p>
+          <p><strong>NUNCA usar con condón masculino simultáneamente.</strong></p>
+        </div>
+        <div class="split-media card3d">
+          <img src="imagenes/preservativo-femenino.jpg" alt="Uso del preservativo femenino" />
+        </div>
+      </section>
+
+      <!-- ===================== DIAPOSITIVA 23 ===================== -->
+      <section class="slide slide-split" data-title="Diafragma y capuchón">
+        <div class="split-text">
+          <h3 class="title-bar">8. DIAFRAGMA Y CAPUCHÓN</h3>
+          <p><strong>Uso:</strong> Copas de silicona que cubren el cuello uterino.</p>
+          <p><strong>Requisito:</strong> Debe usarse siempre con gel espermicida.</p>
+          <p class="warn"><strong>Riesgo:</strong> Dejarlo &gt; 24h puede causar Síndrome de Shock Tóxico.</p>
+        </div>
+        <div class="split-media card3d">
+          <img src="imagenes/diafracma.jpg" alt="Diafragma y capuchón cervical" />
+        </div>
+      </section>
+
+      <!-- ===================== DIAPOSITIVA 24 ===================== -->
+      <section class="slide slide-split" data-title="Esponja y espermicidas">
+        <div class="split-text">
+          <h3 class="title-bar">9. ESPONJA Y ESPERMICIDAS</h3>
+          <p><strong>Esponja:</strong> Poliuretano con Nonoxinol-9. Se activa con agua.</p>
+          <p><strong>Espermicidas:</strong> Cremas o espumas aplicadas 15 min antes del coito.</p>
+          <p><strong>Nota:</strong> Eficacia baja; se recomienda combinar con otros métodos.</p>
+        </div>
+        <div class="split-media card3d">
+          <img src="imagenes/esponja-anticonceptiva.jpg" alt="Esponja anticonceptiva" />
+        </div>
+      </section>
+
+      <!-- ===================== DIAPOSITIVA 25 ===================== -->
+      <section class="slide slide-split" data-title="Ligadura de trompas">
+        <div class="split-text">
+          <h3 class="title-bar">10. LIGADURA DE TROMPAS</h3>
+          <p><strong>Procedimiento:</strong> Bloqueo quirúrgico de las trompas de Falopio.</p>
+          <p><strong>Carácter:</strong> Permanente e irreversible.</p>
+          <p><strong>Ventaja:</strong> No afecta el equilibrio hormonal ni el ciclo menstrual.</p>
+        </div>
+        <div class="split-media card3d">
+          <img src="imagenes/ligaduras.jpg" alt="Ligadura de trompas" onerror="this.style.display='none'" />
+        </div>
+      </section>
+
+      <!-- ===================== DIAPOSITIVA 26 ===================== -->
+      <section class="slide slide-split" data-title="Preservativo masculino">
+        <div class="split-text">
+          <h3 class="title-bar">PRESERVATIVO MASCULINO</h3>
+          <p><strong>Material:</strong> Látex (generalmente). Único método que previene eficazmente ITS.</p>
+          <p><strong>Advertencia:</strong> Evitar lubricantes al aceite (dañan el látex).</p>
+          <p><strong>Responsabilidad:</strong> Fundamental en la prevención compartida.</p>
+        </div>
+        <div class="split-media card3d">
+          <img src="imagenes/Preservatico-masculino.jpg" alt="Preservativo masculino" />
+        </div>
+      </section>
+
+      <!-- ===================== DIAPOSITIVA 27 ===================== -->
+      <section class="slide slide-split" data-title="Vasectomía">
+        <div class="split-text">
+          <h3 class="title-bar">VASECTOMÍA (ESTERILIZACIÓN)</h3>
+          <p><strong>Procedimiento:</strong> Corte de los conductos deferentes.</p>
+          <p><strong>Uso:</strong> Cirugía ambulatoria menor.</p>
+          <p><strong>Nota:</strong> No es inmediata; requiere espermograma a los 3 meses.</p>
+        </div>
+        <div class="split-media card3d">
+          <img src="imagenes/vasectomia.jpg" alt="Vasectomía esterilización masculina" />
+        </div>
+      </section>
+
+      <!-- ===================== DIAPOSITIVA 28 ===================== -->
+      <section class="slide slide-cover slide-closing" data-title="¿Preguntas?">
+        <div class="cover-inner">
+          <h1 class="big-q">¿Preguntas?</h1>
+          <p class="subtitle">La salud sexual es un derecho y una responsabilidad compartida.</p>
+          <p class="closing-cta">Busque asesoramiento ginecológico personalizado.</p>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ============================================================= -->
+    <!-- BOTONES INFERIORES: anterior / siguiente                      -->
+    <!-- ============================================================= -->
+    <button id="btnPrev" class="nav-btn nav-prev" aria-label="Diapositiva anterior">
+      <svg viewBox="0 0 24 24" width="26" height="26"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <button id="btnNext" class="nav-btn nav-next" aria-label="Diapositiva siguiente">
+      <svg viewBox="0 0 24 24" width="26" height="26"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+
+    <!-- Contador de diapositiva -->
+    <div id="counter" class="counter">1 / 28</div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
